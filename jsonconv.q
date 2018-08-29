@@ -3,18 +3,24 @@
 
 // takes in Grafana HTTP POST request
 .z.pp:{
-  rqt:.j.k 6_first x;										/convert request from json, "query"
+  rqt:.j.k 6_first x;										/convert request from json,6_ removes API url type WILL DEVELOP IN LATER CODE
   if[not `targets in key rqt;-1 " "sv string key rqt;:()];					/avoid type error for zero length query
   rqtype:raze rqt[`targets]`type;								/type of request, timeseries or table
   `.grafana.tab upsert (.z.p;raze rqt[`targets]`target);					/insert request into table
   if[rqtype~"timeserie";rsp:tsfunc rqt];							/conditional for format of json given query type
-  if[rqtype~"table";rsp:tbfunc value last .grafana.tab`qry];
+  //if[rqtype~"table";rsp:tbfunc value last .grafana.tab`qry];
+  if[rqtype~"table";rsp:tbfunc rqt];
+
   :.h.hy[`json] rsp;										/send response
  };
 
 // make requested table data in json format
 tbfunc:{[rqt]
   types:10 5 6 7 8 9h!`string,5#`number;							/basic dict of kdb to json datatypes
+  f:"P"$-1_rqt[`range]`from;t:"P"$-1_rqt[`range]`to;
+  rqt:value last .grafana.tab`qry;
+  if[12h<>type exec time from rqt;rqt:update time:.z.D+time from rqt];
+  rqt:select from rqt where time within (f;t);
   colName:cols rqt;										/get column headers
   colType:types type each rqt colName;								/get column json datatypes
   :.j.j enlist `columns`rows`type!								/format into json
