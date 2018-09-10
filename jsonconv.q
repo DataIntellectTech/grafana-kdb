@@ -23,9 +23,7 @@ query:{[rqt]
   // retrieve final query and append to table to log
   rqtype:raze rqt[`targets]`type;
   `.gkdb.tab upsert (.z.p;raze rqt[`targets]`target);
-  if[rqtype~"timeserie";rsp:tsfunc[rqt;last .gkdb.tab`qry]];
-  if[rqtype~"table";rsp:tbfunc value last .gkdb.tab`qry];
-  :.h.hy[`json] rsp;
+  :.h.hy[`json]$[rqtype~"timeserie";tsfunc[rqt;last .gkdb.tab`qry];tbfunc value last .gkdb.tab`qry];
  };
 
 search:{[rqt] :.h.hy[`json] .j.j tables[];};
