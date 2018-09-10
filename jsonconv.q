@@ -5,10 +5,11 @@
 
 // wrapper if user has custom .z.pp
 .old.zpp:@[{.z.pp};" ";{".z.pp not defined"}];
-.z.pp:{$["X-Grafana-Org-Id"~string last key last x; zpp x;.old.zpp x]};
+.z.pp:{$[(`$"X-Grafana-Org-Id")in key last x;zpp;.old.zpp]x};
 
 // return alive response for GET requests
-.z.ph:{.h.hy[`json] .j.j "200 OK"};
+.old.zph:.z.ph;
+.z.ph:{$[(`$"X-Grafana-Org-Id")in key last x;"HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n";.old.zph x]};
 
 // retrieve Grafana HTTP POST request,store in table and process as either timeseries or table
 zpp:{.tmp.x:x;
@@ -19,8 +20,6 @@ zpp:{.tmp.x:x;
  };
 
 query:{[rqt]
-  // ignore requests while typing
-  if[not `targets in key rqt;-1 " "sv string key rqt;:()];
   // retrieve final query and append to table to log
   rqtype:raze rqt[`targets]`type;
   `.gkdb.tab upsert (.z.p;raze rqt[`targets]`target);
