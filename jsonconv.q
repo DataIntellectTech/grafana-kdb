@@ -49,10 +49,10 @@ tsfunc:{[x;rqt]
   rqt:![rqt;();0b;enlist[`msec]!enlist(_:;(+;946684800000;(%;($;enlist[`long];.gkdb.timeCol);1000000)))];
   rqt:?[rqt;enlist (within;`msec;(enlist;mil`from;mil`to));0b;()];  
   
-  $[(2<count args) and `g~first args 0;[show 0; graphsym[x;colN;rqt]];
-      (2<count args) and `t~first args 0; [show 1;tablesym[x;colN;rqt]];
-      (2=count args) and `g~first args 0; [show 2;graphnosym[x;colN;rqt]];
-      (2=count args) and `t~first args 0; [show 3;tablenosym[x;colN;rqt]];
+  $[(2<count args) and `g~first args 0; graphsym[x;colN;rqt];
+      (2<count args) and `t~first args 0; tablesym[x;colN;rqt];
+      (2=count args) and `g~first args 0; graphnosym[x;colN;rqt];
+      (2=count args) and `t~first args 0; tablenosym[x;colN;rqt];
      `Wronginput
      ]
  };
