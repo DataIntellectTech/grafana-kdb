@@ -78,43 +78,45 @@ tsfunc:{[x;rqt]
   // form milliseconds since epoch column
   rqt:@[rqt;`msec;:;mil rqt .gkdb.timeCol];
   // select desired time period only
-  rqt:?[rqt;enlist (within;`msec;mil "P"$-1_'x[`range]`from`to);0b;()];  
-  
+  rqt:?[rqt;enlist(within;`msec;mil "P"$-1_'x[`range]`from`to);0b;()];  
+
   // cases for graph/table and sym arguments
-  $[(2<numArgs) and `g~tyArgs;graphsym[x;colN;rqt;first args 2];
-    (2<numArgs) and `t~tyArgs;tablesym[x;colN;rqt;first args 2];
-    (2=numArgs) and `g~tyArgs;graphnosym[x;colN;rqt];
-    (2=numArgs) and `t~tyArgs;tablenosym[x;colN;rqt];
-     ]
+  $[(2<numArgs) and `g~tyArgs;graphsym[colN;rqt];
+    (2<numArgs) and `t~tyArgs;tablesym[colN;rqt;first args 2];
+    (2=numArgs) and `g~tyArgs;graphnosym[colN;rqt];
+    (2=numArgs) and `t~tyArgs;tablenosym[colN;rqt];
+     `WrongInput]
  };
 
 /////////////////////////////// CASES FOR TSFUNC ///////////////////////////////
 
 // timeserie request on graph panel w/ no preference on sym seperation
-graphnosym:{[x;colN;rqt]
-  colN:colN where `number=.gkdb.types abs value type each trade 0;
+graphnosym:{[colN;rqt]
+  // return columns with json number type only
+  colN:-1_colN where `number=.gkdb.types abs value type each rqt 0;
   colName:colN cross `msec;
   build:{y,`target`datapoints!(z 0;value each ?[x;();0b;z!z])};
   :.j.j build[rqt]\[();colName];
  };
 
 // timeserie request on table panel w/ no preference on sym seperation
-tablenosym:{[x;colN;rqt]
+tablenosym:{[colN;rqt]
   colType:.gkdb.types type each rqt colN;
   :.j.j enlist `columns`rows`type!(flip`text`type!(colN;colType);value'[rqt]til count rqt;`table);
  };
 
 // timeserie request on graph panel w/ data for each sym returned
-graphsym:{[x;colN;rqt]
-  colN:colN where `number=.gkdb.types abs value type each trade 0;
-  colName:colN cross `msec;
-  //TO DO:Make table with syms as headers with a column name specified to go under it
-  build:{y,`target`datapoints!(z 0;value each ?[x;();0b;z!z])};
-  :.j.j build[rqt]\[();colName];
+graphsym:{[colN;rqt]
+  // return columns with json number type only
+  colN:-1_colN where `number=.gkdb.types abs value type each rqt 0;
+  syms:?[rqt;();1b;enlist[.gkdb.sym]!enlist .gkdb.sym].gkdb.sym;
+  build:{[rqt;x;y]data:flip value flip ?[rqt;enlist (=;.gkdb.sym;enlist y);0b;`price`msec!`price`msec];x,`target`datapoints!(y;data)};
+  :.j.j build[rqt]\[();syms];
+
  };
 
 // timeserie request on table panel w/ single sym specified
-tablesym:{[x;colN;rqt;symname]
+tablesym:{[colN;rqt;symname]
   colType:.gkdb.types type each rqt colN;
   // select data for requested sym only
   rqt:?[rqt;enlist (=;.gkdb.sym;enlist symname);0b;()];
