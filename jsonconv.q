@@ -48,8 +48,8 @@ search:{[rqt]
   rsp:string tables[];
   rsp,:"t.",/:string tables[];
   rsp,:"g.",/:string tables[];
-  rsp,:("g.",/:string tables[]),\:".allsyms"
-  rsp,:raze (("t.",/:string tables[]),'"."),/:' raze each string each {exec distinct sym from x} each tables[];
+  rsp,:("g.",/:string tables[]),\:".allsyms";
+  rsp,:raze (("t.",/:string tables[]),'"."),/:'string each {exec distinct sym from x} each tables[];
   :.h.hy[`json] .j.j rsp;
  };
 
@@ -71,14 +71,14 @@ tsfunc:{[x;rqt]
   // manipulate queried table
   rqt:value first args 1;
   colN:cols rqt;
-  // function to convert time to milliseconds, takes info dictionary and key
-  mil:{floor .gkdb.epoch+(`long$"P"$-1_x[`range]y)%1000000}[x];
+  // function to convert time to milliseconds, takes timestamp
+  mil:{floor .gkdb.epoch+(`long$x)%1000000};
   // ensure time column is a timestamp
   if[12h<>type exec time from rqt;rqt:@[rqt;.gkdb.timeCol;+;.z.D]];
   // form milliseconds since epoch column
-  rqt:![rqt;();0b;enlist[`msec]!enlist(_:;(+;.gkdb.epoch;(%;($;enlist[`long];.gkdb.timeCol);1000000)))];
+  rqt:@[rqt;`msec;:;mil rqt .gkdb.timeCol];
   // select desired time period only
-  rqt:?[rqt;enlist (within;`msec;(enlist;mil`from;mil`to));0b;()];  
+  rqt:?[rqt;enlist (within;`msec;mil "P"$-1_'x[`range]`from`to);0b;()];  
   
   // cases for graph/table and sym arguments
   $[(2<numArgs) and `g~tyArgs;graphsym[x;colN;rqt;first args 2];
