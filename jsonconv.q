@@ -10,7 +10,7 @@
 // user defined column name of time column
 .gkdb.timeCol:`time;
 // json types of kdb datatypes NEEDS COMPLETING
-.gkdb.types:10 5 6 7 8 9h!`string,5#`number;
+.gkdb.types:(`short$til[20])!`array`boolean,#[3;`null],#[5;`number],#[10;`string];
 // milliseconds between 1970 and 2000
 .gkdb.epoch:946684800000;
 // user defined column name of sym column
