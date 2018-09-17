@@ -92,7 +92,7 @@ tsfunc:{[x;rqt]
 
 // timeserie request on graph panel w/ no preference on sym seperation
 graphnosym:{[x;colN;rqt]
-  // columns to be returned UPDATE THIS TO ONLY HAVE COLS OF TYPE NUMBER
+  colN:colN where `number=.gkdb.types abs value type each trade 0;
   colName:colN cross `msec;
   build:{y,`target`datapoints!(z 0;value each ?[x;();0b;z!z])};
   :.j.j build[rqt]\[();colName];
@@ -106,6 +106,7 @@ tablenosym:{[x;colN;rqt]
 
 // timeserie request on graph panel w/ data for each sym returned
 graphsym:{[x;colN;rqt]
+  colN:colN where `number=.gkdb.types abs value type each trade 0;
   colName:colN cross `msec;
   //TO DO:Make table with syms as headers with a column name specified to go under it
   build:{y,`target`datapoints!(z 0;value each ?[x;();0b;z!z])};
