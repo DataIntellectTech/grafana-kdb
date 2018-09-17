@@ -20,10 +20,11 @@
 
 // wrapper if user has custom .z.pp
 .old.zpp:@[{.z.pp};" ";{".z.pp not defined"}];
-.z.pp:{$["X-Grafana-Org-Id"~string last key last x; zpp x;.old.zpp x]};
+.z.pp:{$[(`$"X-Grafana-Org-Id")in key last x;zpp;.old.zpp]x};
 
 // return alive response for GET requests
-.z.ph:{.h.hy[`json] .j.j "200 OK"};
+.old.zph:.z.ph;
+.z.ph:{$[(`$"X-Grafana-Org-Id")in key last x;"HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n";.old.zph x]};
 
 // retrieve Grafana HTTP POST request,store in table and process as either timeseries or table
 zpp:{.tmp.x:x;
@@ -40,9 +41,7 @@ query:{[rqt]
   // retrieve final query and append to table to log
   rqtype:raze rqt[`targets]`type;
   `.gkdb.tab upsert (.z.p;raze rqt[`targets]`target);
-  if[rqtype~"timeserie";rsp:tsfunc[rqt;last .gkdb.tab`qry]];
-  if[rqtype~"table";rsp:tbfunc value last .gkdb.tab`qry];
-  :.h.hy[`json] rsp;
+  :.h.hy[`json]$[rqtype~"timeserie";tsfunc[rqt;last .gkdb.tab`qry];tbfunc value last .gkdb.tab`qry];
  };
 
 search:{[rqt]
@@ -86,7 +85,6 @@ tsfunc:{[x;rqt]
     (2<numArgs) and `t~tyArgs;tablesym[x;colN;rqt;first args 2];
     (2=numArgs) and `g~tyArgs;graphnosym[x;colN;rqt];
     (2=numArgs) and `t~tyArgs;tablenosym[x;colN;rqt];
-    `Wronginput
      ]
  };
 
