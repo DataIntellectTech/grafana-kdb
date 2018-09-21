@@ -9,7 +9,7 @@
 .gkdb.tab:([]time:.z.p;qry:enlist "starting table");
 // user defined column name of time column
 .gkdb.timeCol:`time;
-// json types of kdb datatypes NEEDS COMPLETING
+// json types of kdb datatypes
 .gkdb.types:(`short$til[20])!`array`boolean,#[3;`null],#[5;`number],#[10;`string];
 // milliseconds between 1970 and 2000
 .gkdb.epoch:946684800000;
@@ -32,7 +32,7 @@ zpp:{.tmp.x:x;
   r:" " vs first x;
   // convert grafana mesage to q
   rqt:.j.k r 1;
-  $["query"~r 0;query[rqt];"search"~r 0;search rqt;`PLACEHOLDER]
+  $["query"~r 0;query[rqt];"search"~r 0;search rqt;`$"Annotation url nyi"]
  };
 
 /////////////////////////////// URL HANDLING (query,search) ///////////////////////////////
@@ -41,16 +41,15 @@ query:{[rqt]
   // retrieve final query and append to table to log
   rqtype:raze rqt[`targets]`type;
   `.gkdb.tab upsert(.z.p;raze rqt[`targets]`target);
-  :.h.hy[`json]$[rqtype~"timeserie";tsfunc[rqt;last .gkdb.tab`qry];tbfunc value last .gkdb.tab`qry];
- };
-
-search:{[rqt]
+  :.h.hy[`json]$[rqtype~"timeserie";tsfunc[rqt;last .gkdb.tab`qry];tbfunc value last .gkdb.tab`};
+erch:{[rqt]
   // build drop down case options from tables in port
-  rsp:string tables[];
-  rsp,:"t.",/:string tables[];
-  rsp,:"g.",/:string tables[];
-  rsp,:raze(("g.",/:string tables[]),'"."),/:'string {(cols x) where`number=.gkdb.types abs value type each x 0}each tables[];
-  rsp,:raze(("t.",/:string tables[]),'"."),/:'string each {exec distinct sym from x} each tables[];
+  tables:tables[];
+  rsp:string tables;
+  rsp,:s1:string` sv/:`t,/:tables;
+  rsp,:s2:string` sv/:`g,/:tables;
+  rsp,:raze(s2,'"."),/:'string {(cols x) where`number=.gkdb.types abs value type each x 0}each tables;
+  rsp,:raze(s1,'"."),/:'string each {distinct x .gkdb.sym}'[tables];
   :.h.hy[`json].j.j rsp;
  };
 
@@ -67,8 +66,8 @@ tbfunc:{[rqt]
 
 // process a timeseries request and return in Json format, takes in query and information dictionary
 tsfunc:{[x;rqt]
-  // split arguments
-  args:`$"."vs rqt;numArgs:count args;tyArgs:first args 0;
+  / split arguments
+  numArgs:count args:`$"."vs rqt;tyArgs:first args 0;
   // manipulate queried table
   rqt:value first args 1;
   colN:cols rqt;
@@ -86,7 +85,7 @@ tsfunc:{[x;rqt]
     (2<numArgs)and`t~tyArgs;tablesym[colN;rqt;first args 2];
     (2=numArgs)and`g~tyArgs;graphnosym[colN;rqt];
     (2=numArgs)and`t~tyArgs;tablenosym[colN;rqt];
-     `WrongInput]
+     `$"Wrong input"]
  };
 
 /////////////////////////////// CASES FOR TSFUNC ///////////////////////////////
