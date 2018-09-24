@@ -41,15 +41,19 @@ query:{[rqt]
   // retrieve final query and append to table to log
   rqtype:raze rqt[`targets]`type;
   `.gkdb.tab upsert(.z.p;raze rqt[`targets]`target);
-  :.h.hy[`json]$[rqtype~"timeserie";tsfunc[rqt;last .gkdb.tab`qry];tbfunc value last .gkdb.tab`};
-erch:{[rqt]
+  :.h.hy[`json]$[rqtype~"timeserie";tsfunc[rqt;last .gkdb.tab`qry];tbfunc value last .gkdb.tab`qry];
+ };
+
+search:{[rqt]
   // build drop down case options from tables in port
-  tables:tables[];
-  rsp:string tables;
-  rsp,:s1:string` sv/:`t,/:tables;
-  rsp,:s2:string` sv/:`g,/:tables;
-  rsp,:raze(s2,'"."),/:'string {(cols x) where`number=.gkdb.types abs value type each x 0}each tables;
-  rsp,:raze(s1,'"."),/:'string each {distinct x .gkdb.sym}'[tables];
+  tabs:tables[];
+  rsp:string tabs;
+  rsp,:s1:string` sv/:`t,/:tabs;
+  rsp,:s2:string` sv/:`g,/:tabs; 
+  rsp,:raze(s2,'"."),/:'c1:string {(cols x) where`number=.gkdb.types abs value type each x 0}each tabs;
+  rsp,:raze(s1,'"."),/:'c2:string each {distinct x .gkdb.sym}'[tabs];
+  rsp,:s3:raze((string` sv/:`o,/:tabs),'"."),/:'c1;
+  rsp,:raze((string` sv/:`o,/:tabs),'"."),/:'{x[0] cross ".",'string distinct x[1] .gkdb.sym}each (enlist each c1),'tabs;
   :.h.hy[`json].j.j rsp;
  };
 
@@ -85,10 +89,20 @@ tsfunc:{[x;rqt]
     (2<numArgs)and`t~tyArgs;tablesym[colN;rqt;first args 2];
     (2=numArgs)and`g~tyArgs;graphnosym[colN;rqt];
     (2=numArgs)and`t~tyArgs;tablenosym[colN;rqt];
-     `$"Wrong input"]
+    (4=numArgs)and`o~tyArgs;othersym[args;rqt];
+    (3=numArgs)and`o~tyArgs;othernosym[first args 2;rqt]; 
+    `$"Wrong input"]
  };
 
 /////////////////////////////// CASES FOR TSFUNC ///////////////////////////////
+
+// timeserie request on non-specific panel w/ no preference on sym seperation
+othernosym:{[colN;rqt]
+  // return columns with json number type only
+  colName:colN cross`msec;
+  build:{y,`target`datapoints!(z 0;value each ?[x;();0b;z!z])};
+  :.j.j build[rqt]\[();colName];
+ };
 
 // timeserie request on graph panel w/ no preference on sym seperation
 graphnosym:{[colN;rqt]
@@ -103,6 +117,14 @@ graphnosym:{[colN;rqt]
 tablenosym:{[colN;rqt]
   colType:.gkdb.types type each rqt colN;
   :.j.j enlist`columns`rows`type!(flip`text`type!(colN;colType);value'[rqt]til count rqt;`table);
+ };
+
+// timeserie request on non-specific panel w/ data for one sym returned
+othersym:{[args;rqt]
+  // specify what columns data to return, taken from drop down input
+  outCol:(first[args 2],`msec);
+  data:flip value flip?[rqt;enlist(=;.gkdb.sym;enlist first args 3);0b;outCol!outCol];
+  :.j.j enlist `target`datapoints!(first args 3;data);
  };
 
 // timeserie request on graph panel w/ data for each sym returned
