@@ -13,9 +13,9 @@ Kdb v3.5+
 2. Download our adaptor jsonconv.q from this repository.
 
 3. In your newly installed Grafana folder run the command:
-    ./bin/grafana-server web
+    `./bin/grafana-server web`
 This will start your Grafana server. If you would like to alter the port which this is run on, this can be changed in:
-    /grafana-5.2.2/conf/custom.ini
+    `/grafana-5.2.2/conf/custom.ini`
 
 4. You can now open the Grafana server in your web browser where you will be greeted with a login page to fill in appropriatly.
 
