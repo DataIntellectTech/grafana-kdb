@@ -13,22 +13,20 @@ Kdb v3.5+
 2.Download our adaptor jsonconv.q from this repository.
 
 3.In your newly installed Grafana folder run the command:
-```./bin/grafana-server web.```
-
-4.This will start your Grafana server. If you would like to alter the port which this is run on, this can be changed in:
+```./bin/grafana-server web```. This will start your Grafana server. If you would like to alter the port which this is run on, this can be changed in:
 ```/grafana-5.2.2/conf/custom.ini```
 
-5.You can now open the Grafana server in your web browser where you will be greeted with a login page to fill in appropriatly.
+4.You can now open the Grafana server in your web browser where you will be greeted with a login page to fill in appropriatly.
 
-6.Once logged in, navigate to the plugin section where you will find the simple JSON adaptor, install this.
+5.Once logged in, navigate to the plugin section where you will find the simple JSON adaptor, install this.
 
-7.Upon installation of the JSON you can now set-up your datasource. 
+6.Upon installation of the JSON you can now set-up your datasource. 
 
-8.Host your data on a port accesible to Grafana and in this port load our script jsonconv.q.
+7.Host your data on a port accesible to Grafana and in this port load our script jsonconv.q.
 
-9.In the "add new datasource" panel, enter the details for the port in which your data is hosted, making the type JSON.
+8.In the "add new datasource" panel, enter the details for the port in which your data is hosted, making the type SimpleJSON.
 
-10.Run the test button on the bottom of your page, this should succeed and you are ready to go!
+9.Run the test button on the bottom of your page, this should succeed and you are ready to go!
 
 # Using the adaptor
 
