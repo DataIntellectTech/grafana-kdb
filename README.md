@@ -37,6 +37,5 @@ The best explanation of the inputs allowed in the query section can be seen pict
 
 Upon opening the query box, in the metrics tab, the user will be provided with a populated drop down of all possible options. Due to the limitations of the JSON messages, it is not possible for our adaptor to distinguish between panels. Consequently, every possible option is returned for each panel, the user can reduce these choices by simply entering the first letter of their panel type, g for graph, t for table and o for other (heatmap or single stat). From here, you can follow the above diagram to specify your type of query. 
 
-
-
-
+# Limitations
+This adaptor has been built to allow visualisation of real-time non-partitioned data. It is capable of handling static and timeseries data. However, due to the nature of HDB data on disk, it cannot present such partioned data. A solution for this is currently being worked on.
