@@ -8,26 +8,26 @@ Kdb v3.5+
 
 ## Getting Started
 
-1.Download and set up Grafana. This is well explained on the [Grafana website](https://grafana.com/get), where you have the option to either download the software locally or let Grafana host it for you. For the purpose of this document, we host the software locally.
+1. Download and set up Grafana. This is well explained on the [Grafana website](https://grafana.com/get), where you have the option to either download the software locally or let Grafana host it for you. For the purpose of this document, we host the software locally.
 
-2.Download our adaptor jsonconv.q from this repository.
+2. Download our adaptor jsonconv.q from this repository.
 
-3.In your newly installed Grafana folder run the command:
-```./bin/grafana-server web```
+3. In your newly installed Grafana folder run the command:
+    ./bin/grafana-server web
 This will start your Grafana server. If you would like to alter the port which this is run on, this can be changed in:
-```/grafana-5.2.2/conf/custom.ini```
+    /grafana-5.2.2/conf/custom.ini
 
-4.You can now open the Grafana server in your web browser where you will be greeted with a login page to fill in appropriatly.
+4. You can now open the Grafana server in your web browser where you will be greeted with a login page to fill in appropriatly.
 
-5.Once logged in, navigate to the plugin section where you will find the simple JSON adaptor, install this.
+5. Once logged in, navigate to the plugin section where you will find the simple JSON adaptor, install this.
 
-6.Upon installation of the JSON you can now set-up your datasource. 
+6. Upon installation of the JSON you can now set-up your datasource. 
 
-7.Host your data on a port accesible to Grafana and in this port load our script jsonconv.q.
+7. Host your data on a port accesible to Grafana and in this port load our script jsonconv.q.
 
-8.In the "add new datasource" panel, enter the details for the port in which your data is hosted, making the type SimpleJSON.
+8. In the "add new datasource" panel, enter the details for the port in which your data is hosted, making the type SimpleJSON.
 
-9.Run the test button on the bottom of your page, this should succeed and you are ready to go!
+9. Run the test button on the bottom of your page, this should succeed and you are ready to go!
 
 ## Using the adaptor
 
