@@ -27,7 +27,7 @@
 .z.ph:{$[(`$"X-Grafana-Org-Id")in key last x;"HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n";.old.zph x]};
 
 // retrieve Grafana HTTP POST request,store in table and process as either timeseries or table
-zpp:{.tmp.x:x;
+zpp:{
   // get API url from request
   r:" " vs first x;
   // convert grafana mesage to q
