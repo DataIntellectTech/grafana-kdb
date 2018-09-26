@@ -47,13 +47,19 @@ query:{[rqt]
 search:{[rqt]
   // build drop down case options from tables in port
   tabs:tables[];
+  symtabs:?[.gkdb.sym in'cols each tabs;tabs;count[tabs]#`] except `;
+  timetabs:?[.gkdb.timeCol in'cols each tabs;tabs;count[tabs]#`] except `;
   rsp:string tabs;
-  rsp,:s1:string` sv/:`t,/:tabs;
-  rsp,:s2:string` sv/:`g,/:tabs; 
-  rsp,:raze(s2,'"."),/:'c1:string {(cols x) where`number=.gkdb.types abs value type each x 0}each tabs;
-  rsp,:raze(s1,'"."),/:'c2:string each {distinct x .gkdb.sym}'[tabs];
-  rsp,:s3:raze((string` sv/:`o,/:tabs),'"."),/:'c1;
-  rsp,:raze((string` sv/:`o,/:tabs),'"."),/:'{x[0] cross ".",'string distinct x[1] .gkdb.sym}each (enlist each c1),'tabs;
+  if[count timetabs;
+    rsp,:s1:string` sv/:`t,/:timetabs;
+    rsp,:s2:string` sv/:`g,/:timetabs; 
+    rsp,:raze(s2,'"."),/:'c1:string {(cols x) where`number=.gkdb.types abs value type each x 0}each timetabs;
+    rsp,:raze((string` sv/:`o,/:timetabs),'"."),/:'c1;
+    if[count symtabs;
+      rsp,:raze(s1,'"."),/:'c2:string each {distinct x .gkdb.sym}'[timetabs];
+      rsp,:raze((string` sv/:`o,/:timetabs),'"."),/:'{x[0] cross ".",'string distinct x[1] .gkdb.sym}each (enlist each c1),'timetabs;
+     ];
+   ];
   :.h.hy[`json].j.j rsp;
  };
 
