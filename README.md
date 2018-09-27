@@ -34,7 +34,7 @@ This will start your Grafana server. If you would like to alter the port which t
 With the adaptor successfully installed your data is ready to visualized. From this point onwards you can proceed to use Grafana as it is intended, with the only difference coming in the form of the queries. Use cases and further examples of the queries can be seen in our blogpost: ENTER LINK FOR BLOGPOST. Here you can see examples of graphs, tables, heatmaps and single statistics. 
 The best explanation of the inputs allowed in the query section can be seen pictorially here:
 
-![InputFormat](https://github.com/AquaQAnalytics/grafana-kdb/blob/Json/DropDownOptions.png?raw=true)
+![InputFormat](https://github.com/AquaQAnalytics/grafana-kdb/blob/Master/DropDownOptions.png?raw=true)
 
 Upon opening the query box, in the metrics tab, the user will be provided with a populated drop down of all possible options. Due to the limitations of the JSON messages, it is not possible for our adaptor to distinguish between panels. Consequently, every possible option is returned for each panel, the user can reduce these choices by simply entering the first letter of their panel type, g for graph, t for table and o for other (heatmap or single stat). From here, you can follow the above diagram to specify your type of query. 
 
