@@ -31,7 +31,7 @@ This will start your Grafana server. If you would like to alter the port which t
 
 ## Using the adaptor
 
-With the adaptor successfully installed your data is ready to visualized. From this point onwards you can proceed to use Grafana as it is intended, with the only difference coming in the form of the queries. Use cases and further examples of the queries can be seen in our blogpost: ENTER LINK FOR BLOGPOST. Here you can see examples of graphs, tables, heatmaps and single statistics. 
+With the adaptor successfully installed your data is ready to visualized. From this point onwards you can proceed to use Grafana as it is intended, with the only difference coming in the form of the queries. Use cases and further examples of the queries can be seen in our blogpost:[The Grafana-KDB Adaptor](https://www.aquaq.co.uk/q/ask-shall-receive-grafana-kdb-adaptor/). Here you can see examples of graphs, tables, heatmaps and single statistics. 
 The best explanation of the inputs allowed in the query section can be seen pictorially here:
 
 ![InputFormat](https://github.com/AquaQAnalytics/grafana-kdb/blob/master/DropDownOptions.png?raw=true)
