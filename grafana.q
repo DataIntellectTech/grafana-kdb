@@ -148,3 +148,4 @@ tablesym:{[colN;rqt;symname]
   rqt:?[rqt;enlist(=;sym;enlist symname);0b;()];
   :.j.j enlist`columns`rows`type!(flip`text`type!(colN;colType);catchvals rqt;`table);
  };
+
